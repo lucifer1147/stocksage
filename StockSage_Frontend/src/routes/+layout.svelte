@@ -3,7 +3,7 @@
 	let { children } = $props();
 </script>
 
-<div class="h-full w-full">
+<div class="h-full w-full transition-all">
 	<nav class="w-full h-[10%] bg-blue-900">
 
 	</nav>
