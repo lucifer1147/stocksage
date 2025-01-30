@@ -247,7 +247,7 @@ def train(
             optimizer.step()
             
             train_loss += loss.item()   
-        train_losses.append(train_loss) 
+        train_losses.append(train_loss/len(train_dataset)) 
 
         model.eval()
         val_loss = 0
@@ -265,7 +265,7 @@ def train(
                     once = False
                 
                 val_loss += loss.item()
-        val_losses.append(val_loss)
+        val_losses.append(val_loss/len(val_dataset))
         
         if schedulerChoice == 'reduceonplateau':
             scheduler.step(val_loss)
