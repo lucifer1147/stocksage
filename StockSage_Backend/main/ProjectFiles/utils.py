@@ -8,6 +8,7 @@ import joblib
 import os
 
 from sklearn.preprocessing import RobustScaler
+from numpy.lib.stride_tricks import as_strided
 
 from .indicators import *
 
@@ -191,11 +192,15 @@ def prepareInput(
     
     X, y = [], []
     
-    for i in range(len(dfX) - timeframe):
-        X.append(dfX[i:i + timeframe, :])
+    stride_0, stride_1 = dfX.strides
+    num_samples = dfX.shape[0] - timeframe
+    X = as_strided(
+        dfX,
+        shape=(num_samples, timeframe, dfX.shape[1]),
+        strides=(stride_0, stride_0, stride_1)
+    )
         
-    for i in range(timeframe, len(dfY)):
-        y.append(dfY[i, :])
+    y = dfY[timeframe:]
 
     X = torch.Tensor(np.array(X, dtype=float))
     y = torch.Tensor(np.array(y, dtype=float))
