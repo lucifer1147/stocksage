@@ -186,4 +186,4 @@ It contains the following files:
 - `utils.py`
 - `neuralnet.py`
 
-The train.py will also create a sub-directory `Models`. It will contain the files for the models you train (if you choose to save them) in a sub directory by name that you specify in the `saveModelAs` parameter as `<saveModelAs>_files`. For further details, look at the `README.md` file of the `ProjectFiles` directory.
+The `train.py` will also create a sub-directory `Models`. It will contain the files for the models you train (if you choose to save them) in a sub directory by name that you specify in the `saveModelAs` parameter as `<saveModelAs>_files`. For further details, look at the `README.md` file of the `ProjectFiles` directory.
