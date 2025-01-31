@@ -33,9 +33,6 @@ class StockDataset(Dataset):
         input_tensor = self.inputs[idx].clone().detach().float()
         target_tensor = self.targets[idx].clone().detach().float()
         return input_tensor, target_tensor
-    
-def count_parameters(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def init_weights(m):
     if isinstance(m, nn.Linear) or isinstance(m, nn.LSTM):
