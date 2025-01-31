@@ -9,141 +9,141 @@
 <div class="w-full h-[80%] flex flex-wrap p-5">
     <InputComponent
       width="w-full"
-      title="Save Model As"
-      bind:binder={trainingParams.saveModelAs}
+      title={trainingParams.saveModelAs.name}
+      bind:binder={trainingParams.saveModelAs.value}
       inputType="text"
       placeholder="sm_stock_model"
     />
     <InputComponent
       width="w-1/2"
-      title="Tickers"
-      bind:binder={trainingParams.tickers}
+      title={trainingParams.tickers.name}
+      bind:binder={trainingParams.tickers.value}
       inputType="text"
       placeholder="NVDA, AAPL, MSFT, AMZN"
     />
     <InputComponent
       width="w-1/2"
-      title="Additional Features"
-      bind:binder={trainingParams.addFeatures}
+      title={trainingParams.addFeatures.name}
+      bind:binder={trainingParams.addFeatures.value}
       inputType="text"
       placeholder="RSI, MACD"
     />
 
     <InputComponent
       width="w-1/4"
-      title="Maximum Epochs"
-      bind:binder={trainingParams.maxEpochs}
+      title={trainingParams.maxEpochs.name}
+      bind:binder={trainingParams.maxEpochs.value}
       inputType="number"
       placeholder="50"
     />
     <InputComponent
       width="w-1/4"
-      title="Minimum Epochs"
-      bind:binder={trainingParams.minEpochs}
+      title={trainingParams.minEpochs.name}
+      bind:binder={trainingParams.minEpochs.value}
       inputType="number"
       placeholder="10"
     />
     <InputComponent
       width="w-1/4"
-      title="Batch Size"
-      bind:binder={trainingParams.batchSize}
+      title={trainingParams.batchSize.name}
+      bind:binder={trainingParams.batchSize.value}
       inputType="number"
       placeholder="16"
     />
     <InputComponent
       width="w-1/4"
-      title="Patience"
-      bind:binder={trainingParams.patience}
+      title={trainingParams.patience.name}
+      bind:binder={trainingParams.patience.value}
       inputType="number"
       placeholder="10"
     />
 
     <InputComponent
       width="w-1/3"
-      title="Number of Layers"
-      bind:binder={trainingParams.numLayers}
+      title={trainingParams.numLayers.name}
+      bind:binder={trainingParams.numLayers.value}
       inputType="number"
       placeholder="5"
     />
     <InputComponent
       width="w-1/3"
-      title="Size of Hidden Layers"
-      bind:binder={trainingParams.hiddenSize}
+      title={trainingParams.hiddenSize.name}
+      bind:binder={trainingParams.hiddenSize.value}
       inputType="number"
       placeholder="512"
     />
     <InputComponent
       width="w-1/3"
-      title="Learning Rate"
-      bind:binder={trainingParams.learningRate}
+      title={trainingParams.learningRate.name}
+      bind:binder={trainingParams.learningRate.value}
       inputType="number"
       placeholder="512"
     />
     
     <InputComponent
       width="w-1/3"
-      title="Dropout Probability"
-      bind:binder={trainingParams.dropoutProb}
+      title={trainingParams.dropoutProb.name}
+      bind:binder={trainingParams.dropoutProb.value}
       inputType="number"
       placeholder="0.2"
     />
     <InputComponent
       width="w-1/3"
-      title="TimeFrame"
-      bind:binder={trainingParams.timeFrame}
+      title={trainingParams.timeFrame.name}
+      bind:binder={trainingParams.timeFrame.value}
       inputType="number"
       placeholder="20"
     />
 
     <InputComponent
       width="w-1/3"
-      title="Iteration for Checkpoints"
-      bind:binder={trainingParams.checkpointsIter}
+      title={trainingParams.checkpointsIter.name}
+      bind:binder={trainingParams.checkpointsIter.value}
       inputType="number"
       placeholder="20"
     />
 
     <SelectComponent
-      title="Optimizer Choice"
+      title={trainingParams.optimizerChoice.name}
       options={optimizerOptions}
-      bind:selected={trainingParams.optimizerChoice}
+      bind:selected={trainingParams.optimizerChoice.value}
       width="w-1/2"
     />
     <SelectComponent
-      title="Scheduler Choice"
+      title={trainingParams.schedulerChoice.name}
       options={schedulerOptions}
-      bind:selected={trainingParams.schedulerChoice}
+      bind:selected={trainingParams.schedulerChoice.value}
       width="w-1/2"
     />
 
     <SwitchComponent
-      title="Save Extras to File"
-      bind:binder={trainingParams.saveExtrasToFile}
+      title={trainingParams.saveExtrasToFile.name}
+      bind:binder={trainingParams.saveExtrasToFile.value}
       width="w-1/6"
     />
     <SwitchComponent
-      title="Plot the loss Graph"
-      bind:binder={trainingParams.plotLoss}
+      title={trainingParams.plotLoss.name}
+      bind:binder={trainingParams.plotLoss.value}
       width="w-1/6"
     />
     <SwitchComponent
-      title="Debug Mode"
-      bind:binder={trainingParams.debug}
+      title={trainingParams.debug.name}
+      bind:binder={trainingParams.debug.value}
       width="w-1/6"
     />
     <SwitchComponent
-      title="Log To File"
-      bind:binder={trainingParams.logToFile}
+      title={trainingParams.logToFile.name}
+      bind:binder={trainingParams.logToFile.value}
       width="w-1/6"
     />
     <SwitchComponent
-      title="Force Complete Epochs"
-      bind:binder={trainingParams.forceCompleteEpochs}
+      title={trainingParams.forceCompleteEpochs.name}
+      bind:binder={trainingParams.forceCompleteEpochs.value}
       width="w-1/6"
     />
     <SwitchComponent
-      title="Verbose Mode"
-      bind:binder={trainingParams.verbose}
+      title={trainingParams.verbose.name}
+      bind:binder={trainingParams.verbose.value}
       width="w-1/6"
     />
 
