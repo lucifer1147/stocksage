@@ -3,6 +3,8 @@
 
 This is the actual project with the :sparkles: __AI Integration__ :sparkles:. The directory has the following files:
 
+<hr>
+
 ### `train.py`
 It houses the code for the train function. The parameters/arguments for the function are as explained in the CLI Interface README. In brief, the model is based on [__LTSM RNN__](https://en.wikipedia.org/wiki/Long_short-term_memory) implemented using [__PyTorch__](https://pytorch.org/), that takes stock data (name ohlcv data) and predicts the next day's ohlcv.
 
@@ -18,6 +20,8 @@ If `logToFile` is set to `true` then an additional `Models/<model-name>_files/<m
 If `checkpointsIter` is given an integer value, it saves the best model's checkpoint every `checkpointsIter` epochs in a `Models/<model-name>_files/Checkpoints/<model-name>_checkpoint_<epoch>.pth` file. \
 (Or it can save a `Models/<model-name>_files/Checkpoints/<model-name>_checkpoint_<epoch>_early.pth` file if `forceCompleteEpochs` is `false`)
 
+<hr>
+
 ### `utils.py`
 
 As the name suggests, it contains some utility functions used in the `train.py` such as:
@@ -27,8 +31,12 @@ As the name suggests, it contains some utility functions used in the `train.py` 
 - `loadData` &rarr; Actually loads the _Ticker DataFrame_ and handles the logic for saving csv files.
 - `prepareInput` &rarr; Combines the above functions to get the Ticker Data, add features, convert to a tensor, apply scaling using scalers, transform to the data to input and output shape, converts them to tensors and finally returns them.
 
+<hr>
+
 ### `predict.py`
 [To Be Added]
+
+<hr>
 
 ### `indicators.py`
 
@@ -37,6 +45,8 @@ Contains functions for calculating various technical indicators such as:
 - [Exponential Moving Average](https://www.investopedia.com/terms/e/ema.asp)
 - [Moving Average Convergence Divergence](https://www.investopedia.com/terms/m/macd.asp)
 - [Stoatic Oscillator](https://www.investopedia.com/terms/s/stochasticoscillator.asp)
+
+<hr>
 
 ### `neuralnet.py`
 
