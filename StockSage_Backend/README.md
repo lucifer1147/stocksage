@@ -3,7 +3,7 @@
 Now this is the fun part. I designed it in [__Django__](https://www.djangoproject.com/). 
 
 ## Setting up the basics
-For the starters, [create a virtual enviroment](https://docs.python.org/3/library/venv.html), and activate it. It is highly recommended that you do so, so that it doesn't clutter the your main installation
+For the starters, [create a virtual enviroment](https://docs.python.org/3/library/venv.html), and activate it. It is highly recommended that you do so, so that it doesn't clutter the main installation
 
 Then just run `pip install -r requirements.txt`. What it will do is install the modules' specific versions as specified in the `requirements.txt` file.
 
