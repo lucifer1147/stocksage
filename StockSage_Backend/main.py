@@ -1,5 +1,5 @@
-from StockSage_Backend.main.ProjectFiles.train import train
-from StockSage_Backend.main.ProjectFiles.predict import predict
+from main.ProjectFiles.train import train
+from main.ProjectFiles.predict import predict
 
 import argparse
 import datetime as dt
