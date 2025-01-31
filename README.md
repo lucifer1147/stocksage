@@ -13,6 +13,8 @@ Your personal AI-powered stock prediction tool, designed to make stock analysis 
 
 - **User-Friendly GUI**: No complicated setups or confusing interfaces. Stocksage is designed to be intuitive and easy to navigate for anyone.
 
+Sounds Fun? Check it out [here]()!
+
 ---
 \
 With the sales pitch out of the way, this is my first ***actual*** project that I want to ***complete***.
