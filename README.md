@@ -42,7 +42,6 @@ pip install -r requirements.txt
 cd ..
 cd stocksage_frontend
 npm install
-
 ```
 
 To use the CLI (use `python main.py [command] -h` to see the various options):
