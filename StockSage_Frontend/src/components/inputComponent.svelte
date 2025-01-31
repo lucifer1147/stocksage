@@ -1,17 +1,17 @@
 <script>
   let { width, inputType, placeholder, binder = $bindable(), title } = $props();
-  console.log(width, binder)
 </script>
 
 <div
-  class={`flex ${width} h-[10%] rounded-xl text-black text-lg font-semibold font-mono`}
+  class={`flex ${width} h-16 rounded-xl text-black text-lg font-semibold font-mono p-1`}
 >
-  <p class="bg-gray-500 rounded-l-xl w-full flex items-center justify-center">
+  <label for={`${title}_id`} class="bg-gray-300 border-2 border-gray-400 border-r-0 rounded-l-xl w-full flex items-center justify-center text-center p-2">
     {title}
-  </p>
+  </label>
   <input
     type={inputType}
-    class="bg-gray-200 outline-none border-none rounded-r-xl w-full"
+    id = {`${title}_id`}
+    class="bg-gray-200 border-2 border-gray-400 focus:outline-none rounded-r-xl w-full pl-10"
     {placeholder}
     bind:value={binder}
   />
