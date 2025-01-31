@@ -1,38 +1,19 @@
-# sv
+# The FrontEnd
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Basic Setup 
+As forementioned the frontend is made using svelte and the basic setup is not too complicated. Like any other project, clone/pull it, `cd` into the frontend directory and run:
 
-## Creating a project
+- `npm install`
 
-If you're seeing this, you've probably already done this step. Congrats!
+This will install all the required dependencies. Some more common commands that you will need are:
 
-```bash
-# create a new project in the current directory
-npx sv create
+- `npm run dev` &#8594; Hosts the site locally
+- `npm run build` &#8594; Produces the build file in the public directory based on the [adapter](https://svelte.dev/docs/kit/adapters) you installed.
+- `npm run preview` &#8594; Preview the build locally.
 
-# create a new project in my-app
-npx sv create my-app
-```
+For any specific issue you can also refer to the [__SvelteKits Docs__](https://svelte.dev/docs/kit/introduction). The app is minimalistitc as the main purpose is to show the :sparkles: ***AI Integration*** :sparkles: in this project. 
 
-## Developing
+This project also uses [__TailWindCSS__](https://tailwindcss.com/) for the css part. Its really a personal preference as i just prefer to stay in _one file and one file only_ when coding the frontend.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+---
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
