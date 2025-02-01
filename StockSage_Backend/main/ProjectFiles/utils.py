@@ -1,8 +1,9 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
-import logging
+import matplotlib.pyplot as plt
 
+import logging
 import torch
 import joblib
 import os
@@ -225,3 +226,43 @@ def prepareInput(
         if logToFile:
             logger.debug('Returning data tensors and scalers.')
         return X, y, scalerX, scalerY
+
+def plotLossGraph(train_losses: list[float], val_losses: list[float], saveModelAs: str):
+    plt.plot(np.arange(len(train_losses)), train_losses, color='b', label='Train Loss')
+    plt.plot(np.arange(len(val_losses)), val_losses, color='r', label='Validation Loss')
+    
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    
+    plt.savefig(os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_loss_graph.png'))
+    
+def checkZeroGrad(model: torch.nn.Module, logToFile: bool = True, callback: callable = None):
+    for name, param in model.named_parameters():
+            print(f"Debugging: {name} requires_grad: {param.requires_grad}", end='\t')
+            if logToFile:
+                logger.debug(f"Debugging: {name} requires_grad: {param.requires_grad}")
+            if callback:
+                callback({
+                    'message': f"Debugging: {name} requires_grad: {param.requires_grad}",
+                    'debug': True
+                })
+            
+            if param.grad is None:
+                print(f"No gradient for parameter: {name}")
+                if logToFile:
+                    logger.debug(f"No gradient for parameter: {name}")
+                if callback:
+                    callback({
+                        'message': f"No gradient for parameter: {name}",
+                        'debug': True
+                    })
+            else:
+                print(f"{name} gradient mean: {param.grad.mean().item()}")
+                if logToFile:
+                    logger.debug(f"{name} gradient mean: {param.grad.mean().item()}")
+                if callback:
+                    callback({
+                        'message': f"{name} gradient mean: {param.grad.mean().item()}",
+                        'debug': True
+                    })
