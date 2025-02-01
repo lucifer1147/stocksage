@@ -31,15 +31,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'main',
     
-    'corsheaders'
+    'channels',
+    'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +77,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'StockSage_Backend.wsgi.application'
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -84,6 +93,7 @@ DATABASES = {
     }
 }
 
+ASGI_APPLICATION = 'StockSage_Backend.asgi.application'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
