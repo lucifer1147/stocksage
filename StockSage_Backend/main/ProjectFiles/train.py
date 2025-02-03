@@ -45,7 +45,8 @@ def train(
         patience: int = 10,
         
         plotLoss: bool = True,
-        callback: callable = None
+        callback: callable = None,
+        stopSignal = lambda: False
     ):
     
     DEVICE = getDevice()
@@ -292,6 +293,11 @@ def train(
     train_losses, val_losses = [], []
     
     for epoch in range(start_epoch, maxEpochs):
+
+        if stopSignal():  # Check if we should stop
+            if callback:
+                callback({"message": "Training stopped by user."})
+            break
 
         model.train()
         train_loss = 0  
