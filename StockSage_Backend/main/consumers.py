@@ -1,7 +1,12 @@
 import json
+import asyncio
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .ProjectFiles.train import train
+from concurrent.futures import ThreadPoolExecutor
+
+from .ProjectFiles.dummyTrain import train
+
+executor = ThreadPoolExecutor(max_workers=1)
 
 class TrainingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -10,6 +15,8 @@ class TrainingConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         params = data.get("params", {})
+        
+        loop = asyncio.get_event_loop()
 
         # Define a callback to send verbose messages
         async def send_update(message):
@@ -19,10 +26,10 @@ class TrainingConsumer(AsyncWebsocketConsumer):
         def callback(message):
             # Schedule the message to be sent in the event loop
             import asyncio
-            asyncio.create_task(send_update(message))
-
-        # Start training with the callback
-        train(callback=callback, **params)
+            asyncio.run_coroutine_threadsafe(send_update(message), loop)
+            
+        # Offload the train function to a separate thread
+        await loop.run_in_executor(executor, lambda: train(**params, callback=callback))
 
     async def disconnect(self, close_code):
         pass
