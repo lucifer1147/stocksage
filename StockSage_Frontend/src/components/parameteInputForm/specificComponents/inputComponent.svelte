@@ -3,7 +3,7 @@
 </script>
 
 <div
-  class={`flex ${width} h-16 rounded-xl text-black text-lg font-semibold font-mono p-1`}
+  class={`flex ${width} h-20 rounded-xl text-black text-lg font-semibold font-mono p-1`}
 >
   <label for={`${title}_id`} class="bg-gray-300 border-2 border-gray-400 border-r-0 rounded-l-xl w-full flex items-center justify-center text-center p-2">
     {title}
