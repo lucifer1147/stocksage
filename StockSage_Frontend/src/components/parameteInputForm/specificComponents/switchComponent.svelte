@@ -1,8 +1,17 @@
 <script>
-  let { title, binder = $bindable(), width } = $props();
+  let { title, binder = $bindable(), width, activeComponent = $bindable() } = $props();
 </script>
 
-<div class={`${width} flex items-center justify-center font-mono font-bold gap-2 px-3`}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  class={`${width} flex items-center justify-start font-mono font-bold gap-2 px-3`}
+  onmouseenter={() => {
+    activeComponent = title;
+  }}
+  onmouseleave={() => {
+    activeComponent = '';
+  }} 
+>
   <input
     type="checkbox"
     bind:checked={binder}
