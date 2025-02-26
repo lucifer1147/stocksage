@@ -33,6 +33,6 @@
   {:else if formStep === 5}
     <Step6Component bind:trainingParams bind:activeComponent />
   {:else if formStep === 6}
-    <ReviewComponent bind:trainingParams />
+    <ReviewComponent bind:trainingParams bind:activeComponent/>
   {/if}
 </div>

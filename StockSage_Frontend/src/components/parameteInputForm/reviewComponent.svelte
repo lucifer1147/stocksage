@@ -1,5 +1,6 @@
 <script>
-  let { trainingParams = $bindable() } = $props();
+  let { trainingParams = $bindable(), activeComponent = $bindable() } =
+    $props();
 </script>
 
 <div class="w-full h-[60%] flex flex-wrap p-10">
@@ -7,7 +8,15 @@
   <div class="w-full h-[90%] overflow-auto px-8 bg-gray-200 rounded-xl">
     <ul class="list-disc">
       {#each Object.entries(trainingParams) as [key, value]}
-        <li class="w-full flex">
+        <li
+          class="w-full flex"
+          onmouseenter={() => {
+            activeComponent = value.name;
+          }}
+          onmouseleave={() => {
+            activeComponent = "";
+          }}
+        >
           <div class="w-1/2 font-semibold">{value.name}</div>
           <div class="w-1/2">{value.value}</div>
         </li>
