@@ -1,0 +1,1 @@
+<div class="w-full h-[60%] flex flex-wrap p-10"></div>
