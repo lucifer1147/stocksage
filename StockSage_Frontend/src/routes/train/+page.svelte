@@ -1,5 +1,5 @@
 <script>
-  import Step1Component from "/src/components/parameteInputForm/step1Component.svelte";
+  import ParameterInputComponent from "/src/components/parameteInputForm/parameterInputComponent.svelte";
 
   let optimizerOptions = ["adamw", "adam", "rmsprop"];
   let schedulerOptions = ["steplr", "cosineannealinglr", "reduceonplateau"];
@@ -114,52 +114,62 @@
 
   let formStep = $state(0);
   let stepHistory = [];
-
-  $inspect(formStep);
 </script>
 
 <div class="w-full h-full bg-neutral-900 flex items-center justify-center">
-  <div class="w-[90%] h-[80%] bg-white rounded-2xl flex flex-wrap text-black">
-    <h1
-      class="w-full h-[5%] text-3xl flex items-center justify-center py-10 font-bold"
-    >
-      Specify Training Parameters
-    </h1>
+  <div class="w-[90%] h-[80%] bg-white rounded-2xl flex">
+    <div class="w-[60%] h-full rounded-l-2xl flex flex-wrap text-black">
+      <h1
+        class="w-full h-[5%] text-3xl flex items-center justify-center py-10 font-bold"
+      >
+        Specify Training Parameters
+      </h1>
 
-    <div class="w-full h-[5%] flex px-7 gap-x-1">
-      {#each [0, 1, 2, 3, 4, 5] as step}
+      <div class="w-full h-[5%] flex px-7 gap-x-1">
+        {#each [0, 1, 2, 3, 4, 5] as step}
+          <button
+            class={"w-full h-full transition-all " +
+              (formStep > step
+                ? " bg-blue-600 text-blue-600"
+                : formStep === step
+                  ? " bg-indigo-700 text-indigo-700"
+                  : " bg-gray-200 text-gray-200") +
+              (step === 0 ? " rounded-l-full" : "") +
+              (step === 5 ? " rounded-r-full" : "")}
+            onclick={() => {
+              stepHistory.push(formStep);
+              formStep = step;
+            }}>.</button
+          >
+        {/each}
+      </div>
+
+      <ParameterInputComponent
+        bind:trainingParams
+        bind:formStep
+        {schedulerOptions}
+        {optimizerOptions}
+      />
+
+      <div class="flex justify-between w-full h-[15%] px-10 pb-6">
         <button
-          class={"w-full h-full transition-all " +
-            (formStep > step ? " bg-blue-600 text-blue-600" : ( formStep === step ? " bg-indigo-700 text-indigo-700" : " bg-gray-200 text-gray-200")) +
-            (step === 0 ? " rounded-l-full" : "") +
-            (step === 5 ? " rounded-r-full" : "")
-          }
+          class={"bg-blue-600 rounded-lg text-center w-1/6 text-xl font-bold text-white disabled:bg-blue-300 hover:bg-blue-700 transition-all"}
+          onclick={() => {
+            formStep = stepHistory.pop();
+          }}
+          disabled={stepHistory.length === 0 ? true : false}>Back</button
+        >
+        <button
+          class={"bg-blue-600 rounded-lg text-center w-1/6 text-xl font-bold text-white disabled:bg-blue-300 hover:bg-blue-700 transition-all"}
           onclick={() => {
             stepHistory.push(formStep);
-            formStep = step;
+            formStep = formStep + 1;
           }}
-        >.</button>
-      {/each}
+          disabled={formStep === 6 ? true : false}>Next</button
+        >
+      </div>
     </div>
 
-    <Step1Component bind:trainingParams />
-
-    <div class="flex justify-between w-full h-[15%] px-10 pb-6">
-      <button
-        class={"bg-blue-600 rounded-lg text-center w-1/6 text-xl font-bold text-white disabled:bg-blue-300 hover:bg-blue-700 transition-all"}
-        onclick={() => {
-          formStep = stepHistory.pop();
-        }}
-        disabled={formStep === 0 ? true : false}>Back</button
-      >
-      <button
-        class={"bg-blue-600 rounded-lg text-center w-1/6 text-xl font-bold text-white disabled:bg-blue-300 hover:bg-blue-700 transition-all"}
-        onclick={() => {
-          stepHistory.push(formStep);
-          formStep = formStep + 1;
-        }}
-        disabled={formStep === 6 ? true : false}>Next</button
-      >
-    </div>
+    <div class="w-[40%] h-full rounded-r-2xl bg-gray-300"></div>
   </div>
 </div>
