@@ -1,8 +1,19 @@
 <script>
-  let { width, title, options, selected = $bindable() } = $props();
+  let {
+    width,
+    title,
+    options,
+    selected = $bindable(),
+    activeComponent = $bindable(),
+  } = $props();
 </script>
 
-<div class={`${width} h-16 rounded-xl text-black text-lg font-semibold font-mono flex p-1`}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  class={`${width} h-16 rounded-xl text-black text-lg font-semibold font-mono flex p-1`}
+  onmouseenter={() => {activeComponent = title}}
+  onmouseleave={() => {activeComponent = ""}}
+>
   <label
     for={`${title}_id`}
     class="w-1/3 flex items-center justify-center text-center bg-gray-300 border-2 border-gray-400 border-r-0 rounded-l-xl p-2 h-full"

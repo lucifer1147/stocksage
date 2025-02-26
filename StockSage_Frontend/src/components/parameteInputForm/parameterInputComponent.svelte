@@ -11,24 +11,27 @@
   let {
     trainingParams = $bindable(),
     formStep = $bindable(),
+    preset = $bindable(),
+    activeComponent = $bindable(),
     optimizerOptions,
     schedulerOptions,
+    paramPresets
   } = $props();
 </script>
 
 <div class="display: contents">
   {#if formStep === 0}
-    <Step1Component bind:trainingParams />
+    <Step1Component bind:trainingParams bind:activeComponent />
   {:else if formStep === 1}
-    <Step2Component />
+    <Step2Component bind:trainingParams bind:preset bind:activeComponent {paramPresets} />
   {:else if formStep === 2}
-    <Step3Component bind:trainingParams />
+    <Step3Component bind:trainingParams bind:activeComponent />
   {:else if formStep === 3}
-    <Step4Component bind:trainingParams />
+    <Step4Component bind:trainingParams bind:activeComponent />
   {:else if formStep === 4}
-    <Step5Component bind:trainingParams {optimizerOptions} {schedulerOptions} />
+    <Step5Component bind:trainingParams bind:activeComponent {optimizerOptions} {schedulerOptions} />
   {:else if formStep === 5}
-    <Step6Component bind:trainingParams />
+    <Step6Component bind:trainingParams bind:activeComponent />
   {:else if formStep === 6}
     <ReviewComponent bind:trainingParams />
   {/if}

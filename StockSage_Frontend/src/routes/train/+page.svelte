@@ -4,6 +4,83 @@
   let optimizerOptions = ["adamw", "adam", "rmsprop"];
   let schedulerOptions = ["steplr", "cosineannealinglr", "reduceonplateau"];
 
+  const paramPresets = {
+    sm: {
+      numLayers: 5,
+      hiddenSize: 512,
+      learningRate: 0.001,
+      batchSize: 16,
+      dropoutProb: 0.2,
+      addFeatures: [],
+      timeFrame: 20,
+      saveExtrasToFile: true,
+      saveModelAs: "cu_stock_model",
+      checkpointsIter: 20,
+      maxEpochs: 50,
+      minEpochs: 10,
+      patience: 10,
+      plotLoss: true,
+      optimizerChoice: "adamw",
+      schedulerChoice: "steplr",
+    },
+    md: {
+      numLayers: 6,
+      hiddenSize: 1024,
+      learningRate: 0.0005,
+      batchSize: 16,
+      dropoutProb: 0.2,
+      addFeatures: [],
+      timeFrame: 20,
+      saveExtrasToFile: true,
+      saveModelAs: "md_stock_model",
+      checkpointsIter: 20,
+      maxEpochs: 50,
+      minEpochs: 10,
+      patience: 10,
+      plotLoss: true,
+      optimizerChoice: "adamw",
+      schedulerChoice: "steplr",
+    },
+    lg: {
+      numLayers: 8,
+      hiddenSize: 2048,
+      learningRate: 0.0001,
+      batchSize: 16,
+      dropoutProb: 0.2,
+      addFeatures: [],
+      timeFrame: 20,
+      saveExtrasToFile: true,
+      saveModelAs: "lg_stock_model",
+      checkpointsIter: 20,
+      maxEpochs: 50,
+      minEpochs: 10,
+      patience: 10,
+      plotLoss: true,
+      optimizerChoice: "adamw",
+      schedulerChoice: "steplr",
+    }, 
+    xl: {
+      numLayers: 10,
+      hiddenSize: 4096,
+      learningRate: 0.00005,
+      batchSize: 16,
+      dropoutProb: 0.2,
+      addFeatures: [],
+      timeFrame: 20,
+      saveExtrasToFile: true,
+      saveModelAs: "xl_stock_model",
+      checkpointsIter: 20,
+      maxEpochs: 50,
+      minEpochs: 10,
+      patience: 10,
+      plotLoss: true,
+      optimizerChoice: "adamw",
+      schedulerChoice: "steplr",  
+    },
+    cu: {}
+  }
+
+  let preset = $state('cu')
   let trainingParams = $state({
     tickers: {
       value: ["NVDA", "AAPL", "MSFT", "AMZN"],
@@ -114,6 +191,10 @@
 
   let formStep = $state(0);
   let stepHistory = [];
+
+  let activeComponent = $state('')
+
+  $inspect(activeComponent)
 </script>
 
 <div class="w-full h-full bg-neutral-900 flex items-center justify-center">
@@ -136,6 +217,7 @@
                   : " bg-gray-200 text-gray-200") +
               (step === 0 ? " rounded-l-full" : "") +
               (step === 5 ? " rounded-r-full" : "")}
+
             onclick={() => {
               stepHistory.push(formStep);
               formStep = step;
@@ -147,8 +229,12 @@
       <ParameterInputComponent
         bind:trainingParams
         bind:formStep
+        bind:preset
+        bind:activeComponent
+
         {schedulerOptions}
         {optimizerOptions}
+        {paramPresets}
       />
 
       <div class="flex justify-between w-full h-[15%] px-10 pb-6">
@@ -163,7 +249,8 @@
           class={"bg-blue-600 rounded-lg text-center w-1/6 text-xl font-bold text-white disabled:bg-blue-300 hover:bg-blue-700 transition-all"}
           onclick={() => {
             stepHistory.push(formStep);
-            formStep = formStep + 1;
+            if ((formStep === 1) && (preset !== 'cu')) formStep = 4
+            else formStep = formStep + 1;
           }}
           disabled={formStep === 6 ? true : false}>Next</button
         >
