@@ -45,7 +45,6 @@ def train(
         patience: int = 10,
         
         plotLoss: bool = True,
-        callback: callable = None
     ):
     
     DEVICE = getDevice()
@@ -100,11 +99,6 @@ def train(
     
     if logToFile:
         logger.info('Training Config:\n\t' + json.dumps(trainConfig, indent=4))
-        
-    if callback:
-        callback({
-            'message': f"Training Config:\n\t{json.dumps(trainConfig, indent=4)}"
-        })
     
     if saveModelAs is not None:
         with open(os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_train_config.json'), 'w') as f:
@@ -116,14 +110,6 @@ def train(
         logger.info(f"Starting Training [Using: {DEVICE}]...")
         if DEVICE == 'cpu':
             logger.warning('Training on CPU!')
-    if callback:
-        msg = {
-            'message': f"Starting Training [Using: {DEVICE}]...",
-        }
-        if DEVICE == 'cpu':
-            msg['warning'] = 'Training on CPU!'
-        
-        callback(msg)
         
     
     saveToFile = None
@@ -138,11 +124,6 @@ def train(
         print('\tX Shape:', X.shape)
         print('\tY Shape:', y.shape)
         
-    if callback:
-        callback({
-            'message': 'Inputs and targets Loaded:\n\tX Shape: ' + str(X.shape) + '\n\tY Shape: ' + str(y.shape),
-        })
-
     if logToFile:
         logger.info(f"Input and target sizes: X: {X.shape}, y: {y.shape}")
         
@@ -169,10 +150,6 @@ def train(
     
     if logToFile:
         logger.info(f"Dataset sizes: train: {len(train_dataset)}, val: {len(val_dataset)}")
-    if callback:
-        callback({
-            'message': f"Dataset sizes: train: {len(train_dataset)}, val: {len(val_dataset)}",
-        })
 
     model = Model(inputSize, hiddenSize, numLayers, outputSize, dropoutProb).to(DEVICE)
     model.apply(init_weights)
@@ -180,10 +157,6 @@ def train(
     if fromExisting is not None:
         if logToFile:
             logger.info(f"Loading existing model: {os.path.join(rootDir, f'./{fromExisting}_files/{fromExisting}.pth')}")
-        if callback:
-            callback({
-                'message': f"Loading existing model: {os.path.join(rootDir, f'./{fromExisting}_files/{fromExisting}.pth')}",
-            })
         model.load_state_dict(torch.load(os.path.join(rootDir, f'./{fromExisting}_files/{fromExisting}.pth')))
     
     model = model.to(DEVICE)
@@ -201,23 +174,6 @@ def train(
                 logger.debug(f"Sanity Check: Input Shape: {inputs.shape}\t Target Shape: {targets.shape}")
                 logger.debug(f"Sanity Check: Inputs dtype: {inputs.dtype}, device: {inputs.device}")
                 logger.debug(f"Sanity Check: Targets dtype: {targets.dtype}, device: {targets.device}")
-            if callback:
-                callback({
-                    'message': f"Sanity Check: Model Device: {next(model.parameters()).device}",
-                    'sanityCheck': True,
-                })
-                callback({
-                    'message': f"Sanity Check: Inputs dtype: {inputs.dtype}, device: {inputs.device}",
-                    'sanityCheck': True,
-                })
-                callback({
-                    'message': f"Sanity Check: Input Shape: {inputs.shape}\t Target Shape: {targets.shape}",
-                    'sanityCheck': True,
-                })
-                callback({
-                    'message': f"Sanity Check: Targets dtype: {targets.dtype}, device: {targets.device}",
-                    'sanityCheck': True,
-                })
             break
         
     if verbose: 
@@ -225,16 +181,6 @@ def train(
             print("\nInitialized Model!")
         else:
             print('\nLoaded Existing Model!')
-            
-    if callback:
-        if not fromExisting:
-            callback({
-                'message': 'Initialized Model!',
-            })
-        else:
-            callback({
-                'message': 'Loaded Existing Model!',
-            })
 
     criterion = nn.MSELoss()
     
@@ -246,7 +192,7 @@ def train(
     optimizer = optimizerDict[optimizerChoice]
     
     schedulerDict = {
-        'step': torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.05),
+        'steplr': torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.05),
         'reduceonplateau': torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5),
         'cosineannealinglr': torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=maxEpochs)
     }
@@ -257,10 +203,6 @@ def train(
         logger.info(f"Scheduler: Using {schedulerChoice}")
         logger.info(f"Loss Criterion: Using Mean Squared Error")      
 
-    if callback:
-        callback({
-            'message': f"Optimizer: Using {optimizerChoice}\nScheduler: Using {schedulerChoice}\nLoss Criterion: Using Mean Squared Error",
-        })
     if verbose:
         print("\nTraining Model:")
     if logToFile:
@@ -280,10 +222,6 @@ def train(
             print('Loaded Checkpoint!')
         if logToFile:
             logger.info(f'Loaded Checkpoint from {os.path.join(rootDir, f'./{fromCheckpoint[:fromCheckpoint.find("_checkpoint_")]}_files/Checkpoints/{fromCheckpoint}.pth')}!')
-        if callback:
-            callback({
-                'message': f'Loaded Checkpoint from {os.path.join(rootDir, f'./{fromCheckpoint[:fromCheckpoint.find("_checkpoint_")]}_files/Checkpoints/{fromCheckpoint}.pth')}!',
-            })
 
     best_val_loss = float('inf')
     counter = 0
@@ -322,11 +260,6 @@ def train(
                     if logToFile:
                         logger.debug(f"Debug: Outputs shape: {outputs.shape}, Targets shape: {targets.shape}")
                     once = False
-                    if callback:
-                        callback({
-                            'message': f"Debug: Outputs shape: {outputs.shape}, Targets shape: {targets.shape}",
-                            'debug': True,
-                        })
                 
                 val_loss += loss.item()
         val_losses.append(val_loss/len(val_dataset))
@@ -342,11 +275,6 @@ def train(
                     print(f"\tBest val loss improved from {best_val_loss:.4f} to {val_loss:.4f}")
                 if logToFile:
                     logger.debug(f'Best val loss improved from {best_val_loss:.4f} to {val_loss:.4f}')  
-                if callback:
-                    callback({
-                        'message': f"Best val loss improved from {best_val_loss:.4f} to {val_loss:.4f}",
-                        'debug': True,
-                    })
             
             best_model = model.state_dict()
             best_val_loss = val_loss
@@ -359,10 +287,6 @@ def train(
                 print("Early stopping triggered!")
             if logToFile:
                 logger.info(f"Early stopping triggered! With best loss: {best_val_loss}")
-            if callback:
-                callback({
-                    'message': f"Early stopping triggered! With best loss: {best_val_loss}"
-                })
                 
             if checkpointsIter is not None:
                 torch.save({
@@ -376,10 +300,6 @@ def train(
                     print(f"\t\tCheckpoint saved as '{saveModelAs}_checkpoint_{epoch}_early.pth'")
                 if logToFile:
                     logger.info(f"Checkpoint saved as {os.path.join(rootDir, f'./Models/{saveModelAs}_files/Checkpoints/{saveModelAs}_checkpoint_{epoch}_early.pth')}")
-                if callback:
-                    callback({
-                        'message': f"Checkpoint saved as {os.path.join(rootDir, f'./Models/{saveModelAs}_files/Checkpoints/{saveModelAs}_checkpoint_{epoch}_early.pth')}"
-                    })
             
             break
         
@@ -396,19 +316,11 @@ def train(
                     print(f"\t\tCheckpoint saved as '{saveModelAs}_checkpoint_{epoch}.pth'")
                 if logToFile:
                     logger.info(f"Checkpoint saved as {os.path.join(rootDir, f'./Models/{saveModelAs}_files/Checkpoints/{saveModelAs}_checkpoint_{epoch}.pth')}")
-                if callback:
-                    callback({
-                        'message': f"Checkpoint saved as {os.path.join(rootDir, f'./Models/{saveModelAs}_files/Checkpoints/{saveModelAs}_checkpoint_{epoch}.pth')}"
-                    })
-            
+
         if verbose:
             print(f"\tEpoch [{epoch+1}/{maxEpochs}], Train Loss: {train_loss / len(train_loader):.4f}, Val Loss: {val_loss / len(val_loader):.4f}")
         if logToFile:
             logger.info(f"Epoch [{epoch+1}/{maxEpochs}], Train Loss: {train_loss / len(train_loader):.4f}, Val Loss: {val_loss / len(val_loader):.4f}")
-        if callback:
-            callback({
-                'message': f"Epoch [{epoch+1}/{maxEpochs}], Train Loss: {train_loss / len(train_loader):.4f}, Val Loss: {val_loss / len(val_loader):.4f}"
-            })
 
 
     if debug:
@@ -422,21 +334,12 @@ def train(
     if logToFile:
         logger.info("\nTraining Complete!")
         logger.info(f"Best validation loss achieved: {best_val_loss}")
-        
-    if callback:
-        callback({
-            'message': f"Training Complete!\nBest validation loss achieved: {best_val_loss}"
-        })
-    
+
     if plotLoss:
         if verbose:
             print("Plotting Loss Graphs...")
         if logToFile:
             logger.info("Plotting Loss Graphs...")
-        if callback:
-            callback({
-                'message': "Plotting Loss Graphs..."
-            })
         
         plotLossGraph(train_losses, val_losses, saveModelAs)
         
@@ -444,10 +347,6 @@ def train(
             print("Loss Graph saved at:", os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_loss_graph.png'))
         if logToFile:
             logger.info(f"Loss Graph saved at: {os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_loss_graph.png')}")
-        if callback:
-            callback({
-                'message': f"Loss Graph saved at: {os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_loss_graph.png')}"
-            })
     
     if saveModelAs is not None:
         print("Saving Model...")
@@ -458,27 +357,13 @@ def train(
         if logToFile:
             logger.info(f"Training Complete! Model saved to as {os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}.pth')}!")
             logger.info(f"Best validation loss achieved: {best_val_loss}")
-            print('Log file saved at:', os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_training.log'))
-        if callback:
-            callback({
-                'message': f"Training Complete! Model saved to as {os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}.pth')}!"
-            })    
-            callback({
-                'message': f"Best validation loss achieved: {best_val_loss}"
-            })  
+            print('Log file saved at:', os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_training.log'))  
         
     else:    
         if logToFile:
             logger.info("Training Complete! Returning Model...")
             logger.info(f"Best validation loss achieved: {best_val_loss}")
             print('Log file saved at:', os.path.join(rootDir, f'./Models/{saveModelAs}_files/{saveModelAs}_training.log'))
-        if callback:
-            callback({
-                'message': f"Training Complete! Returning Model..."
-            })    
-            callback({
-                'message': f"Best validation loss achieved: {best_val_loss}"
-            })
         
         model.load_state_dict(best_model)
         return model

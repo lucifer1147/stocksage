@@ -1,10 +1,12 @@
 <script>
   import ParameterInputComponent from "/src/components/parameteInputForm/parameterInputComponent.svelte";
+  import { trainingParamsStore } from "$lib/store";
   import {
     trainingParamsNonReactive,
     paramPresets,
     optionToParameter,
   } from "./data";
+  import { goto } from "$app/navigation";
 
   let optimizerOptions = ["adamw", "adam", "rmsprop"];
   let schedulerOptions = ["steplr", "cosineannealinglr", "reduceonplateau"];
@@ -17,7 +19,41 @@
 
   let activeOption = $derived(optionToParameter[activeComponent]);
 
-  $inspect(activeOption);
+  const beginTraining = () => {
+    let kvPair = {}
+    for (const [key, val] of Object.entries(trainingParams)) {
+      if (key === 'addFeatures' || key === 'tickers') {
+        let arr = Object.values(val.value).join('').split(',')
+        arr = arr.map((val) => {
+          return val.toString().trim()
+        })
+
+        if (key === 'tickers') {
+          arr = arr.map((val) => {
+            return val.toUpperCase()
+          })
+        } else if (key === 'addFeatures') {
+          arr = arr.filter((val) => {
+            if (val !== '') return val
+          })
+          arr = arr.map((val) => {
+            return val.toLowerCase()
+          })
+        } 
+
+        kvPair[key] = arr
+      }
+      else if (key !== '') {
+        kvPair[key] = val.value
+      }
+    }
+
+    trainingParamsStore.set({
+      ...kvPair,
+    });
+
+    goto("/train/training/");
+  };
 </script>
 
 <div class="w-full h-full bg-neutral-900 flex items-center justify-center">
@@ -87,15 +123,18 @@
         </h2>
         <ul class="w-full h-[95%] p-5 list-disc">
           <li class="flex">
-            <div class="w-1/3">Option Name</div> - &nbsp;
+            <div class="w-1/3">Option Name</div>
+            - &nbsp;
             <div class="w-2/3">{activeComponent}</div>
           </li>
           <li class="flex">
-            <div class="w-1/3">Backend Option Name</div> - &nbsp;
+            <div class="w-1/3">Backend Option Name</div>
+            - &nbsp;
             <div class="w-2/3">{activeOption}</div>
           </li>
           <li class="flex">
-            <div class="w-1/3">Description</div> - &nbsp;
+            <div class="w-1/3">Description</div>
+            - &nbsp;
             <div class="w-2/3">{trainingParams[activeOption].desc}</div>
           </li>
         </ul>
@@ -104,7 +143,8 @@
       <div class="w-full h-[20%] px-10 pb-8 pt-6">
         <button
           class="bg-blue-600 rounded-lg text-center w-full text-xl font-bold text-white hover:bg-blue-700 transition-all h-full disabled:bg-blue-300"
-          disabled={formStep !== 6 ? true : false}>Begin Training</button
+          disabled={formStep !== 6 ? true : false}
+          onclick={beginTraining}>Begin Training</button
         >
       </div>
     </div>

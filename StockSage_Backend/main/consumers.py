@@ -1,6 +1,7 @@
 import json
-
+import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
 from .ProjectFiles.train import train
 
 class TrainingConsumer(AsyncWebsocketConsumer):
@@ -11,18 +12,23 @@ class TrainingConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         params = data.get("params", {})
 
-        # Define a callback to send verbose messages
+        # Define an async function to send updates
         async def send_update(message):
             await self.send(text_data=json.dumps(message))
 
-        # Bridge the async callback to the sync training function
-        def callback(message):
-            # Schedule the message to be sent in the event loop
-            import asyncio
-            asyncio.create_task(send_update(message))
+        # Wrap the synchronous function `train()` into an async task
+        loop = asyncio.get_event_loop()
 
-        # Start training with the callback
-        train(callback=callback, **params)
+        def run_training():
+            """Runs the training process synchronously while sending live updates."""
+            def callback(message):
+                # Schedule the async send_update function in the event loop
+                asyncio.run_coroutine_threadsafe(send_update(message), loop)
+
+            train(callback=callback, **params)
+
+        # Run the training function in a separate thread
+        await sync_to_async(run_training, thread_sensitive=True)()
 
     async def disconnect(self, close_code):
         pass

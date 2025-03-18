@@ -1,6 +1,6 @@
 export const trainingParamsNonReactive = {
   tickers: {
-    value: ["NVDA", "AAPL", "MSFT", "AMZN"],
+    value: "NVDA, AAPL, MSFT, AMZN",
     name: "Tickers",
     desc: "List of stock tickers to train the model on.",
   },
@@ -30,7 +30,7 @@ export const trainingParamsNonReactive = {
     desc: "Fraction of neurons to drop during training to prevent overfitting.",
   },
   addFeatures: {
-    value: [],
+    value: "RSI, MACD",
     name: "Additional Features",
     desc: "Extra features to include in training (e.g., volume, indicators).",
   },
