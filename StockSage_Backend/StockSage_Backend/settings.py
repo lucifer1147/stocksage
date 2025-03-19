@@ -98,6 +98,17 @@ ASGI_APPLICATION = 'StockSage_Backend.asgi.application'
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+CELERY_BROKER_URL = "redis://localhost:6379/0"  # Redis as broker
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+# Django Cache (for storing progress logs)
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://localhost:6379/1",  # Separate Redis DB for caching logs
+    }
+}
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
